@@ -6,6 +6,7 @@ import importlib.util
 import logging
 import subprocess
 
+
 def move_db_files(db_resource: str):
     """
     Moves the correct db files to the correct location
@@ -21,11 +22,20 @@ def move_db_files(db_resource: str):
             "src/db/postgres_seeder.py",
             "src/flask/flaskapp/seeder.py",
         )
+
     if "mongo" in db_resource:
-        shutil.move(
-            "src/db/mongo_models.py",
-            "src/models.py"
-        )
+        if "{{cookiecutter.project_backend }}" == "fastapi":
+            {# FastAPI Uses Beanie and we have beanie_models.py #}
+            shutil.move(
+                "src/db/beanie_models.py",
+                "src/models.py"
+            )
+        if "{{cookiecutter.project_backend }}" == "flask":
+            shutil.move(
+                "src/db/mongo_models.py",
+                "src/models.py"
+            )
+
         shutil.move(
             "src/db/mongo_seeder.py",
             "src/flask/flaskapp/seeder.py",
