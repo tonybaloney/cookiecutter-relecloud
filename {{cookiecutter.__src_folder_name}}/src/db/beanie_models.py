@@ -2,9 +2,11 @@
 The mongodb model definitions via Beanie. If a 'mongodb' option is selected and the `project_backend` is 'fastapi',
 this will be moved to `src/models.py`.
 #}
+import os
 from pydantic import EmailStr
 from typing import List
-from beanie import Document, Indexed, Link
+from beanie import Document, Indexed, Link, init_beanie
+from motor.motor_asyncio import AsyncIOMotorClient
 
 class Destination(Document):
     name: Indexed(str, unique=True)
@@ -29,3 +31,8 @@ class InfoRequest(Document):
     email: EmailStr
     notes: str
     cruise: Link[Cruise]
+
+
+async def init_db():
+    client = AsyncIOMotorClient(os.environ.get("DATABASE_URI"))
+    await init_beanie(database=client.db_name, document_models=[Destination, Cruise, InfoRequest])
