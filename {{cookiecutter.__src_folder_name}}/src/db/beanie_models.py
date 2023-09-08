@@ -33,6 +33,10 @@ class InfoRequest(Document):
     cruise: Link[Cruise]
 
 
-async def init_db():
+async def init_db(drop: bool = False):
     client = AsyncIOMotorClient(os.environ.get("DATABASE_URI"))
-    await init_beanie(database=client.db_name, document_models=[Destination, Cruise, InfoRequest])
+    await init_beanie(
+        database=client.db_name,
+        document_models=[Destination, Cruise, InfoRequest],
+        allow_index_dropping = drop,
+    )

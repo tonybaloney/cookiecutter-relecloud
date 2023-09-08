@@ -30,10 +30,18 @@ def move_db_files(db_resource: str):
                 "src/db/beanie_models.py",
                 "src/models.py"
             )
+            shutil.move(
+                "src/db/beanie_seeder.py",
+                "src/fastapi/fastapi_app/seeder.py",
+            )
         if "{{cookiecutter.project_backend }}" == "flask":
             shutil.move(
                 "src/db/mongo_models.py",
                 "src/models.py"
+            )
+            shutil.move(
+                "src/db/mongo_seeder.py",
+                "src/flask/flaskapp/seeder.py",
             )
 
         shutil.move(
